@@ -1,0 +1,37 @@
+{
+  "name": "sentimental-analysis",
+  "version": "1.0.0",
+  "description": "sentimental analysis web app",
+  "main": "app.js",
+  "scripts": {
+    "dev": "lite-server",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/maddydevgits/makers-saturday-6.0.git"
+  },
+  "keywords": [
+    "aws",
+    "makers",
+    "saturday",
+    "make",
+    "skilled",
+    "maddy",
+    "aws",
+    "talks"
+  ],
+  "author": "Madhu Parvathaneni",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/maddydevgits/makers-saturday-6.0/issues"
+  },
+  "homepage": "https://github.com/maddydevgits/makers-saturday-6.0#readme",
+  "devDependencies": {
+    "aws-sdk": "2.1502.0",
+    "lite-server": "2.6.1"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}

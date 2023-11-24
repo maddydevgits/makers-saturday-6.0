@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AWS Comprehend Example</title>
+    <style>
+        body {
+            background-color: #f4f4f4;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+        }
+
+        .tab {
+            padding: 10px;
+            margin-right: 10px;
+            background-color: #ddd;
+            cursor: pointer;
+        }
+
+        .tab:hover {
+            background-color: #ccc;
+        }
+
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 100%;
+        }
+
+        label {
+            font-weight: bold;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #4caf50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #results {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>AWS Comprehend Example</h1>
+
+    <div class="tabs">
+        <div class="tab" onclick="showTab('analyze-sentiment')">Analyze Sentiment</div>
+        <div class="tab" onclick="showTab('detect-dominant-language')">Detect Dominant Language</div>
+        <div class="tab" onclick="showTab('detect-entities')">Detect Entities</div>
+        <div class="tab" onclick="showTab('detect-syntax')">Detect Syntax</div>
+        <div class="tab" onclick="showTab('detect-pii')">Detect PII</div>
+    </div>
+
+    <form id="analyze-sentiment-form" class="form-tab">
+        <label for="text">Enter Text:</label>
+        <textarea id="text" rows="4" placeholder="Type your text here..."></textarea>
+        <br>
+        <button type="button" onclick="analyzeSentiment()">Analyze Sentiment</button>
+    </form>
+
+    <form id="detect-dominant-language-form" class="form-tab" style="display: none;">
+        <label for="text">Enter Text:</label>
+        <textarea id="text-language" rows="4" placeholder="Type your text here..."></textarea>
+        <br>
+        <button type="button" onclick="detectDominantLanguage()">Detect Dominant Language</button>
+    </form>
+
+    <form id="detect-entities-form" class="form-tab" style="display: none;">
+        <label for="text">Enter Text:</label>
+        <textarea id="text-entities" rows="4" placeholder="Type your text here..."></textarea>
+        <br>
+        <button type="button" onclick="detectEntities()">Detect Entities</button>
+    </form>
+
+    <form id="detect-syntax-form" class="form-tab" style="display: none;">
+        <label for="text">Enter Text:</label>
+        <textarea id="text-syntax" rows="4" placeholder="Type your text here..."></textarea>
+        <br>
+        <button type="button" onclick="detectSyntax()">Detect Syntax</button>
+    </form>
+
+    <form id="detect-pii-form" class="form-tab" style="display: none;">
+        <label for="text">Enter Text:</label>
+        <textarea id="text-pii" rows="4" placeholder="Type your text here..."></textarea>
+        <br>
+        <button type="button" onclick="detectpii()">Detect PII</button>
+    </form>
+
+    <!-- Add more forms for additional tabs -->
+
+    <h2>Results:</h2>
+    <center><div id="results"></div></center>
+
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script>
+        function showTab(tabName) {
+            $(".form-tab").hide();
+            $("#" + tabName + "-form").show();
+        }
+
+        function analyzeSentiment() {
+            var text = $("#text").val();
+
+            $.ajax({
+                url: "http://localhost:3000/analyze-sentiment",
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                data: JSON.stringify({
+                    text: text
+                }),
+                success: function (data) {
+                    console.log(data);
+                    $("#results").text("Sentiment: " + data.sentiment);
+                },
+                error: function (error) {
+                    console.error("Error analyzing sentiment:", error);
+                    $("#results").text("Error analyzing sentiment.");
+                }
+            });
+        }
+
+        function detectDominantLanguage() {
+            var text = $("#text-language").val();
+
+            $.ajax({
+                url: "http://localhost:3000/detect-dominant-language",
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                data: JSON.stringify({
+                    text: text
+                }),
+                success: function (data) {
+                    console.log(data);
+                    $("#results").text("Langauge: " + data.language);
+                },
+                error: function (error) {
+                    console.error("Error detecting language:", error);
+                    $("#results").text("Error detecting language.");
+                }
+            });
+        }
+
+        function detectEntities() {
+            var text = $("#text-entities").val();
+
+            $.ajax({
+                url: "http://localhost:3000/detect-entities",
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                data: JSON.stringify({
+                    text: text
+                }),
+                success: function (data) {
+                    console.log(data);
+                    $("#results").text("Entities: " + JSON.stringify(data.entities));
+                },
+                error: function (error) {
+                    console.error("Error detecting entities:", error);
+                    $("#results").text("Error detecting entities.");
+                }
+            });
+        }
+
+        function detectSyntax() {
+            var text = $("#text-syntax").val();
+
+            $.ajax({
+                url: "http://localhost:3000/detect-syntax",
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                data: JSON.stringify({
+                    text: text
+                }),
+                success: function (data) {
+                    console.log(data);
+                    $("#results").text("Syntaxes: " + JSON.stringify(data.syntax));
+                },
+                error: function (error) {
+                    console.error("Error detecting Syntaxes:", error);
+                    $("#results").text("Error detecting syntaxes.");
+                }
+            });
+        }
+
+        function detectpii() {
+            var text = $("#text-pii").val();
+
+            $.ajax({
+                url: "http://localhost:3000/detect-pii",
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                data: JSON.stringify({
+                    text: text
+                }),
+                success: function (data) {
+                    console.log(data);
+                    $("#results").text("PII: " + JSON.stringify(data.pii));
+                },
+                error: function (error) {
+                    console.error("Error detecting PII:", error);
+                    $("#results").text("Error detecting PII.");
+                }
+            });
+        }
+    </script>
+</body>
+</html>
